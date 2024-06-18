@@ -3,11 +3,9 @@ import tkinter as tk
 class Program(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.geometry("800x600")
+        self.geometry("1024x768")
         self.title("Finite-state machine simulator | NBL-1-FSM")
         self.canvas = tk.Canvas(self, bg="#a9a9a9")
-
-        # I want a variable that will know what is the current action of the user. This can be add, delete, move or make transition.
         self.current_action = None
 
         add_state_button = tk.Button(self, text="Add state", command=lambda: self.set_current_action("add"))
@@ -17,7 +15,6 @@ class Program(tk.Tk):
         self.current_action_label = tk.Label(self, text="Current action: None")
 
     
-        # I want to grid all the buttons at the top and the canvas below them. I want them to stick to the borders of the window and move on resize.
         add_state_button.grid(row=0, column=0, sticky="we")
         delete_state_button.grid(row=0, column=1, sticky="we")
         move_state_button.grid(row=0, column=2, sticky="we")
@@ -31,9 +28,34 @@ class Program(tk.Tk):
         self.grid_columnconfigure(2, weight=1)
         self.grid_columnconfigure(3, weight=1)
 
+        self.bind("<Button-1>", self.on_click)
+
+    def on_click(self, event):
+        if self.current_action == "add":
+            self.add_state(event)
+        elif self.current_action == "delete":
+            self.delete_state(event)
+        elif self.current_action == "move":
+            self.move_state(event)
+        elif self.current_action == "transition":
+            self.make_transition(event)
+
     def set_current_action(self, action: str):
         self.current_action = action
         self.current_action_label["text"] = f"Current action: {action}"
+
+    def add_state(self, event):
+        self.canvas.create_oval(event.x-25, event.y-25, event.x+25, event.y+25, fill="#abab00", outline="#6f6f6f", width=3)
+    
+    def delete_state(self, event):
+        pass
+
+    def move_state(self, event):
+        pass
+
+    def make_transition(self, event):
+        pass
+
 
 def main():
     window = Program()
