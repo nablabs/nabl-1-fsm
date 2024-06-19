@@ -7,7 +7,7 @@ class Program(tk.Tk):
     def __init__(self):
         super().__init__()
         self.geometry("1024x768")
-        self.title("Finite-state machine simulator | NBL-1-FSM")
+        self.title("Finite-state machine simulator | NABLA-1-FSM")
         self.canvas = tk.Canvas(self, bg="#a9a9a9")
         self.current_action = None
         self.has_initial = False
