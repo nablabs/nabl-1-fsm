@@ -1,5 +1,7 @@
 from fsm import FiniteStateMachine
+from tkinter import messagebox
 import tkinter as tk
+
 
 class Program(tk.Tk):
     def __init__(self):
@@ -8,6 +10,8 @@ class Program(tk.Tk):
         self.title("Finite-state machine simulator | NBL-1-FSM")
         self.canvas = tk.Canvas(self, bg="#a9a9a9")
         self.current_action = None
+        self.has_initial = False
+        self.adding_state = False
         self.actions = []
 
         add_state_button = tk.Button(self, text="Add state", command=lambda: self.set_current_action("add"))
@@ -47,7 +51,42 @@ class Program(tk.Tk):
         self.current_action_label["text"] = f"Current action: {action}"
 
     def add_state(self, event):
-        self.canvas.create_oval(event.x-25, event.y-25, event.x+25, event.y+25, fill="#abab00", outline="#6f6f6f", width=3)
+        if not self.adding_state:
+            self.adding_state = True
+            window = tk.Toplevel(self)
+            window.resizable(False, False)
+            window.title("Add state")
+            label = tk.Label(window, text="State name:")
+            entry = tk.Entry(window)
+            normal_add = tk.Button(window, text="Add as normal state", command=lambda: self.add_state_to_canvas(event, entry.get(), window, "normal"))
+            initial_add = tk.Button(window, text="Add as initial state", command=lambda: self.add_state_to_canvas(event, entry.get(), window, "initial"))
+            acceptable_add = tk.Button(window, text="Add as success state", command=lambda: self.add_state_to_canvas(event, entry.get(), window, "success"))
+            # I want the widgets to extend over the sub window
+            label.pack(fill="x")
+            entry.pack(fill="x")
+            normal_add.pack(fill="x")
+            initial_add.pack(fill="x")
+            acceptable_add.pack(fill="x")
+        
+    
+    def add_state_to_canvas(self, event, state_name, window: tk.Toplevel, state_type: str):
+        if state_type == "initial":
+            if self.has_initial:
+                messagebox.showerror("Error", "There can only be one initial state.")
+                return
+            self.has_initial = True
+            self.canvas.create_oval(event.x-25, event.y-25, event.x+25, event.y+25, fill="#abab00", outline="#6f6f6f", width=3)
+            self.canvas.create_text(event.x, event.y, text=state_name, font=("Arial", 12))
+            self.canvas.create_polygon(event.x-50, event.y-25, event.x-25, event.y, event.x-50, event.y+25, fill="#abab00", outline="#000000", width=2)  
+        elif state_type == "success":
+            self.canvas.create_oval(event.x-30, event.y-30, event.x+30, event.y+30, fill="#abab00", outline="#000000", width=2)
+            self.canvas.create_oval(event.x-25, event.y-25, event.x+25, event.y+25, fill="#abab00", outline="#6f6f6f", width=3)
+            self.canvas.create_text(event.x, event.y, text=state_name, font=("Arial", 12))
+        else:
+            self.canvas.create_oval(event.x-25, event.y-25, event.x+25, event.y+25, fill="#abab00", outline="#6f6f6f", width=3)
+            self.canvas.create_text(event.x, event.y, text=state_name, font=("Arial", 12))
+        self.adding_state = False
+        window.destroy()
     
     def delete_state(self, event):
         pass
