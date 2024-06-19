@@ -34,7 +34,7 @@ class Program(tk.Tk):
         self.grid_columnconfigure(2, weight=1)
         self.grid_columnconfigure(3, weight=1)
 
-        self.bind("<Button-1>", self.on_click)
+        self.canvas.bind("<Button-1>", self.on_click)
 
     def on_click(self, event):
         if self.current_action == "add":
