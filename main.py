@@ -1,3 +1,4 @@
+from fsm import FiniteStateMachine
 import tkinter as tk
 
 class Program(tk.Tk):
@@ -7,6 +8,7 @@ class Program(tk.Tk):
         self.title("Finite-state machine simulator | NBL-1-FSM")
         self.canvas = tk.Canvas(self, bg="#a9a9a9")
         self.current_action = None
+        self.actions = []
 
         add_state_button = tk.Button(self, text="Add state", command=lambda: self.set_current_action("add"))
         delete_state_button = tk.Button(self, text="Delete state", command=lambda: self.set_current_action("delete"))
